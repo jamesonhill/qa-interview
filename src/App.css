@@ -50,8 +50,9 @@ input:focus {
   outline: none;
 }
 
-input.error {
-  border-color: red;
+.error {
+  color: red;
+  margin-bottom: 10px;
 }
 
 label {
@@ -107,6 +108,18 @@ form {
   padding-right: 10px;
 }
 
-#submit {
-  
+@media only screen and (max-width: 600px) {
+  #reset {
+    position: relative;
+    left: 30px;
+  }
+  form {
+    width: 100%
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  #submit {
+    display: none;
+  }
 }
