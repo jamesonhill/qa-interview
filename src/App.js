@@ -7,12 +7,14 @@ import { Grid, Button } from 'react-bootstrap';
 import './App.css';
 
 const GLOBAL_EMAILS = ['john@yahoo.com', 'sally@gmail.com', 'tim@gmail.com', 'marc@gmail.com',
-  'alex@hotmail.com', 'jack@yahoo.com', 'carol@outlook.com', 'test@gmail.com', 'test@yahoo.com',
+  'alex@hotmail.com', 'alex@gmail.com', 'alex@outlook.com', 'jack@yahoo.com', 'jack@gmail.com', 'jim@outlook.com',
+  'jim@gmail.com', 'carol@outlook.com', 'test@gmail.com', 'test@yahoo.com',
   'dan@gmail.com', 'dan@yahoo.com', '123@gmail.com', '123@yahoo.com', '123@outlook.com', 'chris@gmail.com',
   'chris@yahoo.com', 'chris@outlook.com'];
 
 class App extends Component {
-  state = { showBackupEmail: false };
+  state = { showBackupEmail: false, backupEmail: '' };
+
   renderFields() {
     return _.map(Fields, ({ title, name }) => {
       return <Field component={FormField} type="text"
@@ -32,17 +34,30 @@ class App extends Component {
   });
 }
 
+submitData = data => {
+  GLOBAL_EMAILS.push(data.email);
+
+  localStorage.setItem('account', data.email);
+
+  alert(`Account created, ${data}!`);
+  // intentional bug - ^
+
+  return this.props.reset();
+}
+
+handleChange = (e) => {
+  // intentional bug
+  this.setState({ backupEmail: e.target.value + ' ' });
+}
+
   render() {
-    const { showBackupEmail } = this.state;
+    const { showBackupEmail, backupEmail } = this.state;
+    const { pristine, reset, submitting } = this.props;
     return (
       <React.Fragment>
         <h1>Welcome!</h1>
         <Grid>
-          <form onSubmit={this.props.handleSubmit(data => {
-            GLOBAL_EMAILS.push(data.email);
-            localStorage.setItem('account', data.email);
-            alert(`Account created, ${data}!`);
-          })}>
+          <form onSubmit={this.props.handleSubmit(data => this.submitData(data))}>
             { this.renderFields() }
             <div className="backup">
               <input type="checkbox" id="email-backup" onClick={this.toggleField}/>
@@ -52,7 +67,7 @@ class App extends Component {
             { showBackupEmail &&
               <React.Fragment>
                 <label htmlFor="backup-email">Recovery Email</label>
-                <input type="text" id="backup" name="backup-email" />
+                <input type="text" id="backup" name="backup-email" value={backupEmail} onChange={this.handleChange}/>
               </React.Fragment>
             }
             
@@ -60,14 +75,15 @@ class App extends Component {
               id="reset"
               bsStyle="default"
               bsSize="large"
-              onClick={this.props.reset}>
+              disabled={pristine || submitting}
+              onClick={reset}>
               Reset
             </Button>
             <Button type="submit"
               id="submit" 
               bsStyle="primary" 
               bsSize="large" 
-              disabled={this.props.pristine}>
+              disabled={pristine || submitting }>
               Submit
             </Button>
           </form>
@@ -80,6 +96,7 @@ class App extends Component {
 function validateEmail(value) {
   const re = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
   return re.test(value) ? '' : `Email is invailid: ${value}`;
+  // intentional typo bug - ^
 }
 
 function validate(values) {
@@ -90,16 +107,23 @@ function validate(values) {
       errors[name] = `${title} is required!`;
     }
   })
+  if(values.lastName && !values.lastName.trim()) {
+    errors.lastName = 'Last name cannot be empty'
+  }
   if(values.email && GLOBAL_EMAILS.includes(values.email)) {
     errors.email = 'Email is already taken'
   }
-  if(values.password && values.password.length < 5) {
+  if(values.email && !values.email.trim()) {
+    errors.email = 'Email cannot be empty'
+  }
+  if(values.password && values.password.length < 4) {
     errors.password = 'Password is too short'
   }
+  // intentional bug from requirements - ^
   else if(values.password && values.password.length > 12) {
     errors.password = 'Password max length is 16 characters'
   }
-  errors.lastName = '';
+  // intentional bug from requirements - ^
   return errors;
 }
 
