@@ -29,11 +29,13 @@ class App extends Component {
   toggleField = () => {
     this.setState(({ showBackupEmail }) => {
       return {
-        showBackupEmail: !showBackupEmail 
+        showBackupEmail: !showBackupEmail,
+        backupEmail: '' 
     }
   });
 }
 
+// simulate submission
 submitData = data => {
   GLOBAL_EMAILS.push(data.email);
 
@@ -42,7 +44,9 @@ submitData = data => {
   alert(`Account created, ${data}!`);
   // intentional bug - ^
 
-  return this.props.reset();
+  this.props.reset();
+
+  this.setState({ showBackupEmail: false, backupEmail: '' });
 }
 
 handleChange = (e) => {
@@ -60,7 +64,7 @@ handleChange = (e) => {
           <form onSubmit={this.props.handleSubmit(data => this.submitData(data))}>
             { this.renderFields() }
             <div className="backup">
-              <input type="checkbox" id="email-backup" onClick={this.toggleField}/>
+              <input type="checkbox" id="email-backup" onClick={this.toggleField} checked={showBackupEmail} />
                 <span>Add recovery email?</span>
             </div>
 
