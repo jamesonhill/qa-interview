@@ -108,6 +108,11 @@ form {
   padding-right: 10px;
 }
 
+#email-backup {
+  width: 20px;
+  display: inline-block;
+}
+
 @media only screen and (max-width: 600px) {
   #reset {
     position: relative;
@@ -121,5 +126,15 @@ form {
 @media only screen and (max-width: 450px) {
   #submit {
     display: none;
+  }
+  #reset {
+    pointer-events: none;
+  }
+}
+
+@media only screen and (min-width: 700px) and (max-width: 800px) {
+  #Email {
+    width: 650px;
+    margin-left: 50px;
   }
 }

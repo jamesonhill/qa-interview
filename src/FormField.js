@@ -11,7 +11,7 @@ const FormField = ({ input, label, meta: { error, touched }}) => {
       </Row>
       <Row>
         <Col sm={12} md={12} lg={12} >
-          <input {...input} className="field-input" />
+          <input {...input} className="field-input" id={label} />
         </Col>
         <div className="red-text error">
           { touched && error }
