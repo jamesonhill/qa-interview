@@ -4,7 +4,7 @@ import Fields from './Fields';
 import FormField from './FormField';
 import _ from 'lodash';
 import { Grid, Button } from 'react-bootstrap';
-import { Link } from '@reach/router';
+import { navigate } from '@reach/router';
 import './App.css';
 
 const GLOBAL_EMAILS = ['john@yahoo.com', 'sally@gmail.com', 'tim@gmail.com', 'marc@gmail.com',
@@ -45,6 +45,7 @@ submitData = data => {
   this.props.reset();
 
   this.setState({ showBackupEmail: false, backupEmail: '' });
+  navigate('/dashboard');
 }
 
 handleChange = (e) => {
@@ -81,16 +82,13 @@ handleChange = (e) => {
               onClick={reset}>
               Reset
             </Button>
-            <Link to="/dashboard">
-              <Button type="submit"
-                id="submit" 
-                bsStyle="primary" 
-                bsSize="large" 
-                disabled={pristine || submitting }>
-                Submit
-              </Button>
-            </Link>
-            
+            <Button type="submit"
+              id="submit" 
+              bsStyle="primary" 
+              bsSize="large" 
+              disabled={pristine || submitting }>
+              Submit
+            </Button>            
           </form>
         </Grid>
       </React.Fragment>
