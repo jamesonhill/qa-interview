@@ -4,13 +4,14 @@ import Fields from './Fields';
 import FormField from './FormField';
 import _ from 'lodash';
 import { Grid, Button } from 'react-bootstrap';
+import { Link } from '@reach/router';
 import './App.css';
 
 const GLOBAL_EMAILS = ['john@yahoo.com', 'sally@gmail.com', 'tim@gmail.com', 'marc@gmail.com',
   'alex@hotmail.com', 'alex@gmail.com', 'alex@outlook.com', 'jack@yahoo.com', 'jack@gmail.com', 'jim@outlook.com',
   'jim@gmail.com', 'carol@outlook.com', 'test@gmail.com', 'test@yahoo.com',
   'dan@gmail.com', 'dan@yahoo.com', '123@gmail.com', '123@yahoo.com', '123@outlook.com', 'chris@gmail.com',
-  'chris@yahoo.com', 'chris@outlook.com'];
+  'chris@yahoo.com', 'chris@outlook.com', 'a@a.com', 'a@a', 'a@abc.com'];
 
 class App extends Component {
   state = { showBackupEmail: false, backupEmail: '' };
@@ -40,9 +41,6 @@ submitData = data => {
   GLOBAL_EMAILS.push(data.email);
 
   localStorage.setItem('account', data.email);
-
-  alert(`Account created, ${data}!`);
-  // intentional bug - ^
 
   this.props.reset();
 
@@ -83,13 +81,16 @@ handleChange = (e) => {
               onClick={reset}>
               Reset
             </Button>
-            <Button type="submit"
-              id="submit" 
-              bsStyle="primary" 
-              bsSize="large" 
-              disabled={pristine || submitting }>
-              Submit
-            </Button>
+            <Link to="/dashboard">
+              <Button type="submit"
+                id="submit" 
+                bsStyle="primary" 
+                bsSize="large" 
+                disabled={pristine || submitting }>
+                Submit
+              </Button>
+            </Link>
+            
           </form>
         </Grid>
       </React.Fragment>
